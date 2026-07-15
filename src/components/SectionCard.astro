@@ -1,0 +1,20 @@
+---
+import { slugify, withBase } from "../utils/paths";
+
+interface Props {
+  name: string;
+  count: number;
+  topics: string[];
+}
+
+const { name, count, topics } = Astro.props;
+---
+
+<article class="section-card">
+  <div>
+    <p class="section-count">{count} {count === 1 ? "video" : "videos"}</p>
+    <h3><a href={withBase(`/sections/${slugify(name)}/`)}>{name}</a></h3>
+    {topics.length > 0 && <p class="section-topics">Explore {topics.slice(0, 3).join(", ")}{topics.length > 3 ? ", and more" : ""}.</p>}
+  </div>
+  <span class="section-arrow" aria-hidden="true">→</span>
+</article>

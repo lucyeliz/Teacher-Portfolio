@@ -1,0 +1,36 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../utils/paths";
+
+const description = "Learn about Lucy Krych, her Cognitive Science studies at UC San Diego, and her approach to welcoming future coders into computational thinking.";
+---
+
+<BaseLayout title="About" description={description}>
+  <header class="container page-hero">
+    <p class="eyebrow">About Lucy</p>
+    <h1>Teaching with curiosity and care</h1>
+    <p class="page-intro">I'm Lucy, a prospective teacher that focuses on computational learning and fostering future coders. I study Cognitive Science with a specialization in Language and Culture at University of California, San Diego</p>
+  </header>
+
+  <section class="container about-grid" aria-label="Biography and teaching philosophy">
+    <img
+      class="about-portrait"
+      src={withBase("/images/lucy-krych-headshot-900.webp")}
+      srcset={`${withBase("/images/lucy-krych-headshot-480.webp")} 480w, ${withBase("/images/lucy-krych-headshot-900.webp")} 900w`}
+      sizes="(max-width: 48rem) calc(100vw - 2rem), 34vw"
+      alt="Portrait of Lucy Krych"
+      width="900"
+      height="677"
+      loading="eager"
+      decoding="async"
+    />
+    <div class="about-copy prose">
+      <h2>Why computing education</h2>
+      <p>I am interested in how people understand ideas, communicate what they know, and learn through making. Computing projects bring those interests together: they give learners a space to test an idea, notice what happens, and revise their thinking.</p>
+
+      <h2>My teaching philosophy</h2>
+      <p>I want technical learning to feel welcoming rather than mysterious. That means explaining new ideas in everyday language, making each step visible, and treating mistakes as useful clues instead of failures.</p>
+      <p>The work in this portfolio is an early record of that practice. Each walkthrough is designed to show not only a finished project, but also the reasoning a learner can use to build, understand, and talk about it.</p>
+    </div>
+  </section>
+</BaseLayout>

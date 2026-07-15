@@ -1,0 +1,49 @@
+---
+import type { VideoEntry } from "../utils/content";
+import { getVideoEmbed } from "../utils/embeds";
+import { assetUrl, withBase } from "../utils/paths";
+import { getVideoThumbnail } from "../utils/videos";
+
+interface Props {
+  video: VideoEntry;
+}
+
+const { video } = Astro.props;
+const { source, videoFile, videoUrl, title } = video.data;
+const poster = getVideoThumbnail(video);
+const embed = source === "local" ? null : getVideoEmbed(source, videoUrl);
+---
+
+{source === "local" ? (
+  <div class="player-frame">
+    <video
+      controls
+      preload="metadata"
+      playsinline
+      poster={poster ? assetUrl(poster) : undefined}
+      aria-label={`${title} video`}
+    >
+      <source src={withBase(videoFile)} type="video/mp4" />
+      Your browser does not support embedded video. <a href={withBase(videoFile)}>Open the video file</a>.
+    </video>
+  </div>
+) : embed ? (
+  <div class="player-frame">
+    <iframe
+      src={embed.src}
+      title={`${title} video player`}
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+    ></iframe>
+  </div>
+) : (
+  <div class="player-linkout">
+    <div>
+      <h2>Watch this project on its original site</h2>
+      <p>This video provider does not offer a reliable embedded player, so it opens in a new tab.</p>
+      <a class="button button-primary" href={videoUrl} target="_blank" rel="noopener noreferrer">Open {title}</a>
+    </div>
+  </div>
+)}

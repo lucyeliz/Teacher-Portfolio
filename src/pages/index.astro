@@ -1,0 +1,115 @@
+---
+import PondMotif from "../components/PondMotif.astro";
+import RippleDivider from "../components/RippleDivider.astro";
+import SectionCard from "../components/SectionCard.astro";
+import VideoCard from "../components/VideoCard.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getPublishedVideoEntries } from "../utils/content";
+import { withBase } from "../utils/paths";
+import { getSections, getTopics } from "../utils/videos";
+
+const videos = await getPublishedVideoEntries();
+const featured = videos.filter((video) => video.data.featured).slice(0, 3);
+const sections = getSections(videos);
+const homeUrl = new URL(withBase("/"), Astro.site).href;
+const description = "Meet Lucy Krych and explore clear, classroom-minded walkthroughs of programming projects, lesson ideas, and teaching reflections.";
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Lucy Krych",
+  url: homeUrl,
+  email: "mailto:lkrych@ucsd.edu",
+  image: new URL(withBase("/images/lucy-krych-headshot-900.webp"), Astro.site).href,
+  description: "Prospective teacher studying Cognitive Science with a specialization in Language and Culture at the University of California, San Diego.",
+  affiliation: {
+    "@type": "CollegeOrUniversity",
+    name: "University of California, San Diego",
+  },
+};
+---
+
+<BaseLayout title="Home" description={description} jsonLd={personSchema}>
+  <section class="container hero" aria-labelledby="home-title">
+    <div class="hero-copy">
+      <p class="eyebrow">lucy krych's</p>
+      <h1 class="hero-title" id="home-title">Teaching <span>Portfolio</span></h1>
+      <p class="hero-tagline">Teaching future innovators through a computational thinking lens</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href={withBase("/videos/")}>Explore the videos</a>
+        <a class="button button-secondary" href={withBase("/about/")}>Meet Lucy</a>
+      </div>
+    </div>
+    <div class="hero-portrait-wrap">
+      <img
+        class="hero-portrait"
+        src={withBase("/images/lucy-krych-headshot-900.webp")}
+        srcset={`${withBase("/images/lucy-krych-headshot-480.webp")} 480w, ${withBase("/images/lucy-krych-headshot-900.webp")} 900w`}
+        sizes="(max-width: 48rem) 78vw, 34vw"
+        alt="Lucy Krych smiling in a warm indoor portrait"
+        width="900"
+        height="677"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <PondMotif />
+    </div>
+  </section>
+
+  <RippleDivider />
+
+  <section class="container section-block intro-panel" aria-labelledby="welcome-heading">
+    <div>
+      <p class="eyebrow">A little about me</p>
+      <h2 id="welcome-heading">Learning can feel like discovery.</h2>
+      <p>I'm Lucy, a prospective teacher that focuses on computational learning and fostering future coders. I study Cognitive Science with a specialization in Language and Culture at University of California, San Diego</p>
+    </div>
+    <aside class="story-note">
+      <strong>What you’ll find here</strong>
+      <p>Short, approachable videos that make the thinking behind a project visible—even if you have never written a line of code.</p>
+    </aside>
+  </section>
+
+  {featured.length > 0 && (
+    <section class="container section-block" aria-labelledby="featured-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Start here</p>
+          <h2 id="featured-heading">Featured projects</h2>
+        </div>
+        <a class="text-link" href={withBase("/videos/")}>See every video <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="video-grid">
+        {featured.map((video, index) => <VideoCard video={video} headingLevel="h3" showFeatured eager={index === 0} />)}
+      </div>
+    </section>
+  )}
+
+  <RippleDivider />
+
+  <section class="container section-block" aria-labelledby="sections-heading">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Browse the collection</p>
+        <h2 id="sections-heading">Portfolio sections</h2>
+      </div>
+      <p>Each section gathers projects around a part of my growth as a computing educator.</p>
+    </div>
+    {sections.length > 0 ? (
+      <div class="section-grid">
+        {sections.map((section) => (
+          <SectionCard
+            name={section}
+            count={videos.filter((video) => video.data.section === section).length}
+            topics={getTopics(videos, section)}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">
+        <h3>Nothing here yet</h3>
+        <p>New teaching projects will appear here soon.</p>
+      </div>
+    )}
+  </section>
+</BaseLayout>

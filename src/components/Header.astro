@@ -1,0 +1,83 @@
+---
+import { getAllVideoEntries } from "../utils/content";
+import { withBase, slugify } from "../utils/paths";
+import { getSections } from "../utils/videos";
+import LeafMark from "./LeafMark.astro";
+
+const videos = await getAllVideoEntries();
+const sections = getSections(videos);
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isCurrent = (path: string) => {
+  const normalized = withBase(path).replace(/\/$/, "") || "/";
+  if (path === "/") return currentPath === normalized;
+  return currentPath === normalized || currentPath.startsWith(`${normalized}/`);
+};
+---
+
+<header class="site-header" data-site-header>
+  <div class="container header-inner">
+    <a class="site-brand" href={withBase("/")} aria-label="Lucy Krych Teaching Portfolio, Home">
+      <LeafMark />
+      <span>Lucy Krych</span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" data-nav-toggle>
+      <span data-nav-label>Menu</span>
+    </button>
+
+    <nav class="site-nav" id="site-navigation" aria-label="Main navigation" data-site-nav>
+      <ul>
+        <li><a href={withBase("/")} aria-current={isCurrent("/") ? "page" : undefined}>Home</a></li>
+        <li><a href={withBase("/videos/")} aria-current={isCurrent("/videos/") ? "page" : undefined}>All videos</a></li>
+        {sections.map((section) => (
+          <li>
+            <a
+              href={withBase(`/sections/${slugify(section)}/`)}
+              aria-current={isCurrent(`/sections/${slugify(section)}/`) ? "page" : undefined}
+            >
+              {section}
+            </a>
+          </li>
+        ))}
+        <li><a href={withBase("/about/")} aria-current={isCurrent("/about/") ? "page" : undefined}>About</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>("[data-site-header]");
+  const toggle = header?.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+  const nav = header?.querySelector<HTMLElement>("[data-site-nav]");
+  const label = header?.querySelector<HTMLElement>("[data-nav-label]");
+
+  if (header && toggle && nav && label) {
+    header.dataset.enhanced = "true";
+
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute("aria-expanded", String(open));
+      nav.dataset.open = String(open);
+      label.textContent = open ? "Close" : "Menu";
+    };
+
+    toggle.addEventListener("click", () => {
+      setOpen(toggle.getAttribute("aria-expanded") !== "true");
+    });
+
+    nav.addEventListener("click", (event) => {
+      if ((event.target as Element).closest("a")) setOpen(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    const desktop = window.matchMedia("(min-width: 48.001rem)");
+    desktop.addEventListener("change", (event) => {
+      if (event.matches) setOpen(false);
+    });
+  }
+</script>

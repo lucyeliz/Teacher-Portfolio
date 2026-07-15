@@ -1,0 +1,39 @@
+---
+import "@fontsource/fraunces/latin-400.css";
+import "@fontsource/fraunces/latin-600.css";
+import "@fontsource/fraunces/latin-700.css";
+import "@fontsource/source-serif-4/latin-400.css";
+import "@fontsource/source-serif-4/latin-400-italic.css";
+import "@fontsource/source-serif-4/latin-600.css";
+import "@fontsource/source-serif-4/latin-700.css";
+import "../styles/tokens.css";
+
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  jsonLd?: Record<string, unknown>;
+}
+
+const { title, description, image, jsonLd } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} image={image} />
+    {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <Header />
+    <main class="site-main" id="main-content">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

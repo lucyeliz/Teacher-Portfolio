@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lucyeliz.github.io/Teacher-Portfolio/sitemap-index.xml

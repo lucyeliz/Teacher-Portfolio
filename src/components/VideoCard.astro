@@ -1,0 +1,54 @@
+---
+import type { VideoEntry } from "../utils/content";
+import { formatVideoDate } from "../utils/content";
+import { assetUrl, withBase } from "../utils/paths";
+import { getVideoThumbnail } from "../utils/videos";
+
+interface Props {
+  video: VideoEntry;
+  headingLevel?: "h2" | "h3";
+  showFeatured?: boolean;
+  eager?: boolean;
+}
+
+const {
+  video,
+  headingLevel: Heading = "h2",
+  showFeatured = false,
+  eager = false,
+} = Astro.props;
+const thumbnail = getVideoThumbnail(video);
+const detailUrl = withBase(`/videos/${video.id}/`);
+const isoDate = video.data.date.toISOString().slice(0, 10);
+---
+
+<article class="video-card" data-video-card data-topic={video.data.topic}>
+  {showFeatured && video.data.featured && <span class="featured-badge">Featured</span>}
+  <div class="video-card-media">
+    {thumbnail ? (
+      <img
+        src={assetUrl(thumbnail)}
+        alt={`Preview image for ${video.data.title}`}
+        width="640"
+        height="360"
+        loading={eager ? "eager" : "lazy"}
+        fetchpriority={eager ? "high" : "auto"}
+        decoding="async"
+      />
+    ) : (
+      <div class="topic-placeholder" aria-hidden="true">{video.data.topic}</div>
+    )}
+    <span class="play-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="20" height="20">
+        <path d="m9 7 8 5-8 5Z" fill="currentColor" />
+      </svg>
+    </span>
+  </div>
+  <div class="video-card-body">
+    <span class="topic-chip">{video.data.topic}</span>
+    <Heading><a class="video-card-title" href={detailUrl}>{video.data.title}</a></Heading>
+    <p class="video-card-meta">
+      <span>{video.data.section}</span> · <time datetime={isoDate}>{formatVideoDate(video.data.date)}</time>
+    </p>
+  </div>
+</article>

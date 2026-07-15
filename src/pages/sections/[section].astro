@@ -1,0 +1,79 @@
+---
+import { render } from "astro:content";
+
+import RippleDivider from "../../components/RippleDivider.astro";
+import TopicFilter from "../../components/TopicFilter.astro";
+import VideoCard from "../../components/VideoCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getPublishedVideoEntries, getSectionIntro, type VideoEntry } from "../../utils/content";
+import { slugify } from "../../utils/paths";
+import { getSections, getTopics } from "../../utils/videos";
+
+interface Props {
+  sectionName: string;
+  videos: VideoEntry[];
+}
+
+export async function getStaticPaths() {
+  const allVideos = await getPublishedVideoEntries();
+  const sectionNames = getSections(allVideos);
+  const usedSlugs = new Map<string, string>();
+
+  return sectionNames.map((sectionName) => {
+    const sectionSlug = slugify(sectionName);
+    const previous = usedSlugs.get(sectionSlug);
+    if (previous && previous !== sectionName) {
+      throw new Error(`Section route collision: "${previous}" and "${sectionName}" both become /sections/${sectionSlug}/.`);
+    }
+    usedSlugs.set(sectionSlug, sectionName);
+    return {
+      params: { section: sectionSlug },
+      props: {
+        sectionName,
+        videos: allVideos.filter((video) => video.data.section === sectionName),
+      },
+    };
+  });
+}
+
+const { sectionName, videos } = Astro.props;
+const sectionSlug = slugify(sectionName);
+const intro = await getSectionIntro(sectionSlug);
+const topics = getTopics(videos, sectionName);
+const introText = intro?.data.description;
+const renderedIntro = intro ? await render(intro) : undefined;
+const IntroContent = renderedIntro?.Content;
+const description = introText ?? `Explore ${sectionName.toLowerCase()} from Lucy Krych’s teaching programming portfolio.`;
+---
+
+<BaseLayout title={sectionName} description={description}>
+  <header class="container page-hero">
+    <p class="eyebrow">Portfolio section</p>
+    <h1>{sectionName}</h1>
+    {introText && <p class="page-intro">{introText}</p>}
+    {IntroContent && <div class="prose"><IntroContent /></div>}
+  </header>
+
+  <RippleDivider />
+
+  <section class="container section-block" aria-labelledby="section-videos-heading">
+    <h2 class="sr-only" id="section-videos-heading">{sectionName} videos</h2>
+    {videos.length > 0 ? (
+      <>
+        <TopicFilter topics={topics} total={videos.length} />
+        <div class="video-grid">
+          {videos.map((video) => <VideoCard video={video} />)}
+          <div class="empty-state" data-filter-empty hidden>
+            <h3>Nothing here yet</h3>
+            <p>No videos match that topic right now. Try another filter.</p>
+          </div>
+        </div>
+      </>
+    ) : (
+      <div class="empty-state">
+        <h2>Nothing here yet</h2>
+        <p>This section is ready for its first project.</p>
+      </div>
+    )}
+  </section>
+</BaseLayout>

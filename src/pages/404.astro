@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../utils/paths";
+---
+
+<BaseLayout title="Page Not Found" description="This page could not be found. Return to Lucy Krych’s Teaching Portfolio to explore project videos and teaching reflections.">
+  <section class="container not-found">
+    <div>
+      <p class="pond-number" aria-hidden="true">404</p>
+      <h1>This path wandered off.</h1>
+      <p>The page you were looking for is not here, but the portfolio is only a lily pad away.</p>
+      <div class="button-row justify-center">
+        <a class="button button-primary" href={withBase("/")}>Return Home</a>
+        <a class="button button-secondary" href={withBase("/videos/")}>Browse videos</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

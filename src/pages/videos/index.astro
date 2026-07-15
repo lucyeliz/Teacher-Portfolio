@@ -1,0 +1,43 @@
+---
+import RippleDivider from "../../components/RippleDivider.astro";
+import TopicFilter from "../../components/TopicFilter.astro";
+import VideoCard from "../../components/VideoCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getPublishedVideoEntries } from "../../utils/content";
+import { getTopics } from "../../utils/videos";
+
+const videos = await getPublishedVideoEntries();
+const topics = getTopics(videos);
+const description = "Browse Lucy Krych’s programming walkthroughs, lesson ideas, and reflections, each explained for viewers without a technical background.";
+---
+
+<BaseLayout title="All Videos" description={description}>
+  <header class="container page-hero">
+    <p class="eyebrow">The complete collection</p>
+    <h1>Teaching through projects</h1>
+    <p class="page-intro">Browse every video, or choose a topic to focus on one idea at a time. Each walkthrough explains both what the project does and the thinking behind it.</p>
+  </header>
+
+  <RippleDivider />
+
+  <section class="container section-block" aria-labelledby="video-grid-heading">
+    <h2 class="sr-only" id="video-grid-heading">All portfolio videos</h2>
+    {videos.length > 0 ? (
+      <>
+        <TopicFilter topics={topics} total={videos.length} />
+        <div class="video-grid">
+          {videos.map((video) => <VideoCard video={video} />)}
+          <div class="empty-state" data-filter-empty hidden>
+            <h3>Nothing here yet</h3>
+            <p>No videos match that topic right now. Try another filter.</p>
+          </div>
+        </div>
+      </>
+    ) : (
+      <div class="empty-state">
+        <h2>Nothing here yet</h2>
+        <p>The first project video is on its way.</p>
+      </div>
+    )}
+  </section>
+</BaseLayout>

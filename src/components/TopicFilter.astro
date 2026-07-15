@@ -1,0 +1,51 @@
+---
+interface Props {
+  topics: string[];
+  total: number;
+}
+
+const { topics, total } = Astro.props;
+---
+
+{topics.length > 1 && (
+  <div class="filters" data-topic-filter>
+    <p class="filters-label" id="filter-label">Filter by topic</p>
+    <ul class="filter-list" aria-labelledby="filter-label">
+      <li><button class="filter-chip" type="button" data-topic-value="all" aria-pressed="true">All</button></li>
+      {topics.map((topic) => (
+        <li><button class="filter-chip" type="button" data-topic-value={topic} aria-pressed="false">{topic}</button></li>
+      ))}
+    </ul>
+    <p class="sr-only" aria-live="polite" data-filter-status>{total} videos shown.</p>
+  </div>
+)}
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-topic-filter]").forEach((filter) => {
+    if (filter.dataset.ready === "true") return;
+    filter.dataset.ready = "true";
+
+    const scope = filter.parentElement;
+    const cards = [...(scope?.querySelectorAll<HTMLElement>("[data-video-card]") ?? [])];
+    const buttons = [...filter.querySelectorAll<HTMLButtonElement>("[data-topic-value]")];
+    const status = filter.querySelector<HTMLElement>("[data-filter-status]");
+    const empty = scope?.querySelector<HTMLElement>("[data-filter-empty]");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const selected = button.dataset.topicValue ?? "all";
+        let visible = 0;
+
+        buttons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        cards.forEach((card) => {
+          const show = selected === "all" || card.dataset.topic === selected;
+          card.hidden = !show;
+          if (show) visible += 1;
+        });
+
+        if (empty) empty.hidden = visible !== 0;
+        if (status) status.textContent = `${visible} ${visible === 1 ? "video" : "videos"} shown.`;
+      });
+    });
+  });
+</script>

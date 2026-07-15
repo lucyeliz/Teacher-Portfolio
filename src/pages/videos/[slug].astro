@@ -1,0 +1,89 @@
+---
+import { render } from "astro:content";
+
+import VideoPlayer from "../../components/VideoPlayer.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatVideoDate, getPublishedVideoEntries, type VideoEntry } from "../../utils/content";
+import { slugify, withBase } from "../../utils/paths";
+import { sortVideosNewestFirst } from "../../utils/videos";
+
+interface Props {
+  video: VideoEntry;
+}
+
+export async function getStaticPaths() {
+  const videos = await getPublishedVideoEntries();
+  return videos.map((video) => ({
+    params: { slug: video.id },
+    props: { video },
+  }));
+}
+
+const { video } = Astro.props;
+const allVideos = await getPublishedVideoEntries();
+const sectionVideos = sortVideosNewestFirst(allVideos.filter((entry) => entry.data.section === video.data.section)) as VideoEntry[];
+const currentIndex = sectionVideos.findIndex((entry) => entry.id === video.id);
+const previous = currentIndex > 0 ? sectionVideos[currentIndex - 1] : undefined;
+const next = currentIndex >= 0 && currentIndex < sectionVideos.length - 1 ? sectionVideos[currentIndex + 1] : undefined;
+const { Content } = await render(video);
+const isoDate = video.data.date.toISOString().slice(0, 10);
+const sectionUrl = withBase(`/sections/${slugify(video.data.section)}/`);
+const description = `${video.data.title}: a plain-language ${video.data.topic.toLowerCase()} project walkthrough from Lucy Krych’s teaching portfolio.`;
+---
+
+<BaseLayout title={video.data.title} description={description}>
+  <article class="container video-detail">
+    <a class="back-link" href={sectionUrl}><span aria-hidden="true">←</span>&nbsp; Back to {video.data.section}</a>
+
+    <header class="detail-heading">
+      <div class="detail-meta">
+        <span class="topic-chip">{video.data.topic}</span>
+        <time datetime={isoDate}>{formatVideoDate(video.data.date)}</time>
+      </div>
+      <h1>{video.data.title}</h1>
+    </header>
+
+    <VideoPlayer video={video} />
+
+    <div class="detail-copy">
+      <section class="prose" aria-labelledby="about-project-heading">
+        <h2 id="about-project-heading">About this project</h2>
+        <Content />
+      </section>
+
+      <aside class="artifact-panel" aria-labelledby="related-heading">
+        <h2 id="related-heading">Related materials</h2>
+        {video.data.links.length > 0 ? (
+          <ul class="artifact-list">
+            {video.data.links.map((link) => (
+              <li>
+                <a class="artifact-link" href={link.url} target="_blank" rel="noopener noreferrer">
+                  <span>{link.label}</span><span aria-hidden="true">↗</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="text-muted">There are no related handouts or project links for this video yet.</p>
+        )}
+      </aside>
+    </div>
+
+    {(previous || next) && (
+      <nav class="pager" aria-label={`More videos in ${video.data.section}`}>
+        {previous ? (
+          <a href={withBase(`/videos/${previous.id}/`)}>
+            <small>Previous in this section</small>
+            <strong>{previous.data.title}</strong>
+          </a>
+        ) : <span></span>}
+        {next && (
+          <a href={withBase(`/videos/${next.id}/`)}>
+            <small>Next in this section</small>
+            <strong>{next.data.title}</strong>
+          </a>
+        )}
+      </nav>
+    )}
+  </article>
+</BaseLayout>
