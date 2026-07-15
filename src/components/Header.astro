@@ -28,7 +28,6 @@ const isCurrent = (path: string) => {
     <nav class="site-nav" id="site-navigation" aria-label="Main navigation" data-site-nav>
       <ul>
         <li><a href={withBase("/")} aria-current={isCurrent("/") ? "page" : undefined}>Home</a></li>
-        <li><a href={withBase("/videos/")} aria-current={isCurrent("/videos/") ? "page" : undefined}>All videos</a></li>
         {sections.map((section) => (
           <li>
             <a

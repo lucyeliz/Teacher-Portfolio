@@ -947,6 +947,9 @@
 
   .about-portrait {
     width: 100%;
+    height: auto;
+    aspect-ratio: 900 / 677;
+    object-fit: contain;
     border: 2px solid var(--line-deep);
     border-radius: 46% 54% 48% 52% / 38% 42% 58% 62%;
     box-shadow: var(--shadow-card);
