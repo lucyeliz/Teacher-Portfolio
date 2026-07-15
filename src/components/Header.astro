@@ -2,7 +2,7 @@
 import { getAllVideoEntries } from "../utils/content";
 import { withBase, slugify } from "../utils/paths";
 import { getSections } from "../utils/videos";
-import LeafMark from "./LeafMark.astro";
+import StoryBoatMark from "./StoryBoatMark.astro";
 
 const videos = await getAllVideoEntries();
 const sections = getSections(videos);
@@ -17,7 +17,7 @@ const isCurrent = (path: string) => {
 <header class="site-header" data-site-header>
   <div class="container header-inner">
     <a class="site-brand" href={withBase("/")} aria-label="Lucy Krych Teaching Portfolio, Home">
-      <LeafMark />
+      <StoryBoatMark />
       <span>Lucy Krych</span>
     </a>
 

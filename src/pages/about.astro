@@ -13,17 +13,26 @@ const description = "Learn about Lucy Krych, her Cognitive Science studies at UC
   </header>
 
   <section class="container about-grid" aria-label="Biography and teaching philosophy">
-    <img
-      class="about-portrait"
-      src={withBase("/images/lucy-krych-headshot-900.webp")}
-      srcset={`${withBase("/images/lucy-krych-headshot-480.webp")} 480w, ${withBase("/images/lucy-krych-headshot-900.webp")} 900w`}
-      sizes="(max-width: 48rem) calc(100vw - 2rem), 34vw"
-      alt="Portrait of Lucy Krych"
-      width="900"
-      height="677"
-      loading="eager"
-      decoding="async"
-    />
+    <figure class="about-photo-card">
+      <div class="about-photo-frame">
+        <img
+          class="about-portrait"
+          src={withBase("/images/lucy-krych-about-960.webp")}
+          srcset={`${withBase("/images/lucy-krych-about-640.webp")} 640w, ${withBase("/images/lucy-krych-about-960.webp")} 960w`}
+          sizes="(max-width: 48rem) calc(100vw - 2rem), 28rem"
+          alt="Lucy Krych smiling outdoors at sunset"
+          width="960"
+          height="1200"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+      <figcaption>
+        <strong>Lucy Krych</strong>
+        <span>Prospective teacher · UC San Diego</span>
+      </figcaption>
+    </figure>
     <div class="about-copy prose">
       <h2>Why computing education</h2>
       <p>I am interested in how people understand ideas, communicate what they know, and learn through making. Computing projects bring those interests together: they give learners a space to test an idea, notice what happens, and revise their thinking.</p>

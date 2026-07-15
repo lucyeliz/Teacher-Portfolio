@@ -240,10 +240,17 @@
     color: var(--frog-deep);
   }
 
-  .brand-leaf {
-    width: 2rem;
+  .brand-story-mark {
+    width: 3.65rem;
+    height: auto;
     flex: 0 0 auto;
     color: var(--frog-deep);
+    overflow: visible;
+    transition: transform var(--transition-fast);
+  }
+
+  .site-brand:hover .brand-story-mark {
+    transform: translateY(-1px) rotate(-1deg);
   }
 
   .nav-toggle {
@@ -940,24 +947,93 @@
   .about-grid {
     display: grid;
     align-items: start;
-    gap: clamp(2rem, 6vw, 6rem);
-    grid-template-columns: minmax(14rem, 0.7fr) minmax(0, 1.3fr);
+    gap: clamp(2.5rem, 6vw, 5.5rem);
+    grid-template-columns: minmax(18rem, 0.78fr) minmax(0, 1.22fr);
     padding-bottom: var(--space-9);
+  }
+
+  .about-photo-card {
+    position: sticky;
+    top: 6.5rem;
+    width: min(100%, 28rem);
+    margin: 0;
+    padding: 0.7rem 0.7rem 1rem;
+    border: 1px solid var(--line-deep);
+    border-radius: 1.6rem 0.9rem 1.35rem 1rem;
+    background: var(--card);
+    box-shadow: var(--shadow-lift);
+    transform: rotate(-0.55deg);
+  }
+
+  .about-photo-card::before {
+    position: absolute;
+    top: -0.65rem;
+    left: 50%;
+    width: 5.5rem;
+    height: 1.25rem;
+    border: 1px solid rgba(140, 86, 35, 0.28);
+    background: rgba(201, 138, 62, 0.52);
+    content: "";
+    transform: translateX(-50%) rotate(1.5deg);
+  }
+
+  .about-photo-frame {
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    border: 1px solid var(--line-deep);
+    border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg);
+    background: var(--paper-soft);
   }
 
   .about-portrait {
     width: 100%;
-    height: auto;
-    aspect-ratio: 900 / 677;
-    object-fit: contain;
-    border: 2px solid var(--line-deep);
-    border-radius: 46% 54% 48% 52% / 38% 42% 58% 62%;
+    height: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .about-photo-card figcaption {
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.8rem 0.55rem 0;
+    color: var(--ink-muted);
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+  }
+
+  .about-photo-card figcaption strong {
+    color: var(--ink);
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  .about-copy {
+    max-width: none;
+    padding: clamp(1.5rem, 3.5vw, 2.75rem);
+    border: var(--border-pencil);
+    border-radius: var(--radius-lg) var(--radius-md) var(--radius-lg) var(--radius-md);
+    background:
+      radial-gradient(circle at 94% 5%, rgba(123, 138, 74, 0.11) 0 10%, transparent 10.5%),
+      rgba(251, 247, 234, 0.78);
     box-shadow: var(--shadow-card);
   }
 
   .about-copy h2 {
     margin-top: var(--space-7);
     margin-bottom: var(--space-4);
+  }
+
+  .about-copy h2::before {
+    display: inline-block;
+    width: 0.7rem;
+    height: 0.5rem;
+    margin-right: 0.55rem;
+    border-radius: 60% 40% 58% 42%;
+    background: var(--toad);
+    content: "";
+    transform: rotate(-12deg);
+    vertical-align: 0.16em;
   }
 
   .about-copy h2:first-child {
@@ -1090,6 +1166,14 @@
       min-height: 4.25rem;
     }
 
+    .site-brand {
+      gap: var(--space-2);
+    }
+
+    .brand-story-mark {
+      width: 3.1rem;
+    }
+
     .site-header[data-enhanced="true"] .nav-toggle {
       display: inline-flex;
     }
@@ -1148,6 +1232,14 @@
       grid-template-columns: 1fr;
     }
 
+    .about-photo-card {
+      position: relative;
+      top: auto;
+      width: min(100%, 30rem);
+      margin-inline: auto;
+      transform: none;
+    }
+
     .section-heading {
       align-items: start;
       flex-direction: column;
@@ -1177,6 +1269,14 @@
     .section-grid,
     .pager {
       grid-template-columns: 1fr;
+    }
+
+    .about-photo-card {
+      padding: 0.55rem 0.55rem 0.8rem;
+    }
+
+    .about-copy {
+      padding: var(--space-5);
     }
 
     .pager a:last-child {

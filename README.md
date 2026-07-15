@@ -114,10 +114,11 @@ These are the explicit assumptions used to build and maintain the repository:
 15. The first three newest published videos marked `featured: true` are sufficient for the Home page; additional featured entries remain accessible elsewhere.
 16. The project deliberately ships without monetization, analytics, cookies, a contact form, a database, or server-side behavior.
 17. Theme changes are made through `src/styles/tokens.css`; decorative artwork remains original and evokes a warm storybook mood without copying copyrighted characters or illustrations.
-18. The three supplied `theme image` files reproduce copyrighted Frog and Toad artwork, so they are intentionally excluded from the new site. The headshot is the only migrated image used publicly; all leaf, reed, lily-pad, and ripple motifs are original.
+18. The three supplied `theme image` files reproduce copyrighted Frog and Toad artwork, so they are intentionally excluded from the new site. User-supplied portraits are the only photographs used publicly; all boat, book, leaf, reed, lily-pad, and ripple motifs are original.
 19. The longer About-page biography and teaching-philosophy paragraphs are initial draft copy inferred from the supplied tagline, degree information, audience, and teaching focus. Lucy should revise them as her philosophy develops; the supplied introductory sentence remains verbatim.
 20. “Latest Astro v5” means the newest release within major version 5, currently `5.18.2`, rather than the newest Astro major. npm currently reports Astro advisories whose published fixes require a later major; this project remains a static, input-free build and does not use the affected server-island or dynamic runtime patterns. A future major-version upgrade should be handled as a deliberate maintenance task.
-21. The local `migration/` source bundle is ignored after migration so duplicate videos and the excluded copyrighted theme images are not accidentally committed or deployed. The browser-ready, kebab-case media copies in `public/videos/` and optimized headshot derivatives in `public/images/` are the site’s maintained assets.
+21. The local `migration/` source bundle is ignored after migration so duplicate videos and the excluded copyrighted theme images are not accidentally committed or deployed. The browser-ready, kebab-case media copies in `public/videos/` and optimized portrait derivatives in `public/images/` are the site’s maintained assets.
+22. The newer outdoor portrait is used only on the About page and is cropped to a responsive 4:5 frame; the existing indoor headshot remains on Home so this requested About-page change does not silently alter the established hero or Person-schema image.
 
 ## Launch status
 
