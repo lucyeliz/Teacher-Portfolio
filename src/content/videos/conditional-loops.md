@@ -1,6 +1,6 @@
 ---
 title: "Conditional Loops"
-date: 2026-07-14
+date: 2026-07-20
 section: "Code Walkthroughs"
 topic: "Conditional Loops"
 source: local
@@ -11,6 +11,6 @@ links: []
 featured: false
 draft: false
 ---
-This walkthrough shows how a program can keep repeating an action while responding to a condition. Lucy explains how the project decides when to continue or stop, connecting the blocks on screen to a clear step-by-step plan.
+This walkthrough shows a Snap! soccer-ball challenge that keeps moving the ball to random places until the player catches it with the mouse. Lucy explains how the project stores changing screen positions and uses a stopping condition to decide when the repeated movement should end.
 
 <!-- TODO: Lucy review -->
